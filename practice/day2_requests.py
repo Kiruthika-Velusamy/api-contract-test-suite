@@ -16,6 +16,7 @@ print(response.json())
 print(response.status_code) 
 
 
+
 #POST - create booking
 print("------------------POST - Create booking--------------")
 new_booking = {
