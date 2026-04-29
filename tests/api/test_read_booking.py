@@ -1,5 +1,7 @@
 import pytest
 import requests
+import json
+from jsonschema import validate
 
 @pytest.mark.crud
 def test_get_all_bookings(base_url):
@@ -17,6 +19,11 @@ def test_single_booking(base_url,create_booking_id):
  assert "firstname" in body
  assert "lastname" in body
  assert "totalprice" in body
+ with open("tests/schemas/booking_schema.json") as f:
+  schema=json.load(f)
+  validate(instance=response.json(),schema=schema)
+
+
 
 @pytest.mark.crud
 def test_get_booking_filter_by_name(base_url, booking_data,create_booking_id):
