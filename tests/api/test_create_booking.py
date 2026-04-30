@@ -2,8 +2,8 @@ import pytest
 import requests
 
 @pytest.mark.crud
-def test_create_booking(base_url, booking_data):
-    response=requests.post(f"{base_url}/booking", json=booking_data)
+def test_create_booking(api_client,base_url, booking_data):
+    response=api_client.post("/booking", json=booking_data)
     assert response.status_code==200
     body = response.json()
     assert "bookingid" in body
