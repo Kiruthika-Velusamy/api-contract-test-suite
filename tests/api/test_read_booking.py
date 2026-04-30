@@ -4,8 +4,8 @@ import json
 from jsonschema import validate
 
 @pytest.mark.crud
-def test_get_all_bookings(base_url):
- response= requests.get(f"{base_url}/booking")
+def test_get_all_bookings(api_client,base_url):
+ response= api_client.get("/booking")
  assert response.status_code==200
  bookings=response.json()
  assert len(bookings)>0
@@ -22,7 +22,6 @@ def test_single_booking(base_url,create_booking_id):
  with open("tests/schemas/booking_schema.json") as f:
   schema=json.load(f)
   validate(instance=response.json(),schema=schema)
-
 
 
 @pytest.mark.crud
