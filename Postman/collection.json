@@ -1,58 +1,42 @@
 {
   "info": {
-    "_postman_id": "2e6fe533-6159-458c-8207-ea0e03984178",
-    "name": "My Collection",
-    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "_postman_id": "7ecf5bf2-4580-47f8-868d-1b768d95d64f",
+    "name": "Restful Booker API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "54434520",
-    "_collection_link": "https://go.postman.co/collection/54434520-2e6fe533-6159-458c-8207-ea0e03984178?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/54434520-7ecf5bf2-4580-47f8-868d-1b768d95d64f?source=collection_link"
   },
   "item": [
     {
-      "name": "Get data",
+      "name": "Auth",
       "event": [
         {
-          "listen": "test",
+          "listen": "prerequest",
           "script": {
-            "type": "text/javascript",
             "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});"
-            ]
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "postman-echo.com/get",
-          "host": [
-            "postman-echo",
-            "com"
-          ],
-          "path": [
-            "get"
-          ]
-        },
-        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
-      },
-      "response": []
-    },
-    {
-      "name": "Post data",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"Successful POST request\", function () {",
-              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-              "});",
               ""
-            ]
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status is 200\", ()=>{",
+              "pm.response.to.have.status(200)})",
+              "",
+              "pm.test(\"Token received\", ()=>{",
+              "const body=pm.response.json()",
+              "pm.expect(body.token).to.be.a(\"string\")",
+              "pm.environment.set(\"auth_token\", body.token)",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -61,7 +45,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+          "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"password123\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -69,16 +53,232 @@
           }
         },
         "url": {
-          "raw": "postman-echo.com/post",
+          "raw": "{{base_url}}/auth",
           "host": [
-            "postman-echo",
-            "com"
+            "{{base_url}}"
           ],
           "path": [
-            "post"
+            "auth"
           ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status is 200\",()=>{",
+              "    pm.response.to.have.status(200)",
+              "})",
+              "pm.test(\"get booking id\",()=>{",
+              "    const body=pm.response.json()",
+              "    pm.expect(body.bookingid).to.be.a(\"number\")",
+              "    pm.environment.set(\"booking_id\", body.bookingid)",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"firstname\": \"Test\",\n    \"lastname\": \"User\",\n    \"totalprice\": 150,\n    \"depositpaid\": true,\n    \"bookingdates\": {\n        \"checkin\": \"2026-06-01\",\n        \"checkout\": \"2026-06-10\"\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
-        "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+        "url": {
+          "raw": "{{base_url}}/booking",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status is 200\", ()=>{",
+              "    pm.expect(pm.response.code).to.eql(200)",
+              "})",
+              "pm.test(\"firstname exist\", ()=>{",
+              "    const body=pm.response.json()",
+              "    pm.expect(body.firstname).to.be.a(\"string\")",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/booking/{{booking_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "{{booking_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status is 200\", ()=>{",
+              "    pm.expect(pm.response.code).to.eql(200)",
+              "})",
+              "pm.test(\"verify update\", ()=>",
+              "{",
+              "    const body=pm.response.json()",
+              "    pm.expect(body.firstname).to.eql(\"Updated\")",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "token={{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"firstname\": \"Updated\",\n    \"lastname\": \"User\",\n    \"totalprice\": 999,\n    \"depositpaid\": true,\n    \"bookingdates\": {\n        \"checkin\": \"2026-08-01\",\n        \"checkout\": \"2026-08-10\"\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking/{{booking_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "{{booking_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status is 201\",()=>{",
+              "    pm.expect(pm.response.code).to.eql(201)",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "token={{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking/{{booking_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "{{booking_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verify Deletion",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status is 404\",()=>",
+              "{",
+              "    pm.response.to.have.status(404)",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/booking/{{booking_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "{{booking_id}}"
+          ]
+        }
       },
       "response": []
     }
