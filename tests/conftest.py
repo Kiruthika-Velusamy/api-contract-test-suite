@@ -3,6 +3,13 @@ import requests
 import os
 import yaml
 from utils.data_factory import generate_booking
+from utils.api_client import APIClient
+
+@pytest.fixture
+def api_client(base_url, auth_token):
+  client=APIClient(base_url)
+  client.set_auth_token(auth_token)
+  return client
 
 @pytest.fixture(scope="session")
 def config():
