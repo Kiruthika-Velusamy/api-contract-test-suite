@@ -4,6 +4,14 @@ import os
 import yaml
 from utils.data_factory import generate_booking
 from utils.api_client import APIClient
+from utils.db_helper import DatabaseHelper
+
+
+@pytest.fixture
+def db_helper():
+  db = DatabaseHelper()
+  yield db         
+  db.close() 
 
 @pytest.fixture
 def api_client(base_url, auth_token):
