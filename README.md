@@ -33,9 +33,6 @@ newman run postman/collection.json \
 # Generate Allure report
 allure serve reports/allure-results
 
-## Live Allure Report
-[View Report](https://Kiruthika-Velusamy.github.io/api-contract-test-suite)
-
 ## Author
 Kiruthika Velusamy | QA Automation Engineer
 [GitHub](https://github.com/Kiruthika-Velusamy)
