@@ -1,12 +1,20 @@
+import allure
 import pytest
 import requests
 
+@allure.feature("Booking Management")
+@allure.story("Create Booking")
+
 @pytest.mark.crud
 def test_create_booking(api_client,base_url, booking_data):
-    response=api_client.post("/booking", json=booking_data)
-    assert response.status_code==200
-    body = response.json()
-    assert "bookingid" in body
+    with allure.step("Send POST request to create booking"):
+      response=api_client.post("/booking", json=booking_data)
+    with allure.step("Verify response status is 200"):
+      assert response.status_code==200
+    with allure.step("Verify booking ID is returned"):
+      body = response.json()
+      assert "bookingid" in body
+
     assert body["booking"]["firstname"] == booking_data["firstname"]
     assert body["booking"]["totalprice"] == booking_data["totalprice"]
 

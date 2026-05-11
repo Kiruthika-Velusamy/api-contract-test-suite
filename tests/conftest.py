@@ -1,3 +1,4 @@
+import shutil
 import pytest
 import requests
 import os
@@ -5,6 +6,7 @@ import yaml
 from utils.data_factory import generate_booking
 from utils.api_client import APIClient
 from utils.db_helper import DatabaseHelper
+
 
 
 @pytest.fixture
