@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: smoke-results
-          path: reports/
+          path: reports/allure-results/
 
   regression:
     name: Full Regression
