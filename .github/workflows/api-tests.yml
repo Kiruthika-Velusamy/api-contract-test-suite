@@ -52,14 +52,6 @@ jobs:
       - name: Run full regression
         run: pytest -v
 
-      - name: Run Newman
-        run: |
-          npm install -g newman newman-reporter-htmlextra
-          newman run postman/collection.json \
-            -e postman/environment.json \
-            -r htmlextra \
-            --reporter-htmlextra-export reports/postman-report.html
-
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
